@@ -1,0 +1,29 @@
+api:
+  base_url: ""
+  api_key: ""
+  model: ""
+
+screenshot:
+  interval: 60
+
+app_tracker:
+  enabled: true
+  poll_seconds: 1
+  idle_threshold_minutes: 5
+  record_window_title: true
+  switch_debounce_seconds: 10
+
+pomodoro:
+  work_minutes: 25
+  break_minutes: 5
+  long_break_minutes: 15
+  rounds: 4
+  timeout_website: ""
+
+ui:
+  rank_scope: today
+  rank_top: 8
+  rank_cap_minutes: 15
+  rank_max_cards: 0
+  history_max: 30
+  refresh_seconds: 3

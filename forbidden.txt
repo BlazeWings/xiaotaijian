@@ -1,0 +1,11 @@
+# 禁止运行的软件列表
+# 每行一个进程名（不区分大小写）
+# 以 # 开头的行为注释
+
+PEAK.exe
+Super Animal Royale.exe
+Terraria.exe
+uu_launcher.exe
+ChongZhenSimulator.exe
+uu_agent.exe
+Offworld.exe
