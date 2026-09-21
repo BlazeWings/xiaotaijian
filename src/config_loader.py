@@ -5,11 +5,56 @@ from pathlib import Path
 from typing import Any, Dict, Optional
 
 
+# ---------- 默认配置（首次运行时自动写入） ----------
+DEFAULT_CONFIG = """\
+api:
+  base_url: ""
+  api_key: ""
+  model: ""
+
+screenshot:
+  interval: 60
+
+app_tracker:
+  enabled: true
+  poll_seconds: 1
+  idle_threshold_minutes: 5
+  record_window_title: true
+  switch_debounce_seconds: 10
+
+pomodoro:
+  work_minutes: 25
+  break_minutes: 5
+  long_break_minutes: 15
+  rounds: 4
+  timeout_website: ""
+
+ui:
+  rank_scope: today
+  rank_top: 8
+  rank_cap_minutes: 15
+  rank_max_cards: 0
+  history_max: 30
+  refresh_seconds: 3
+"""
+
+
 def _get_app_dir() -> Path:
     """获取应用程序所在目录（兼容 PyInstaller 打包后的 exe）"""
     if getattr(sys, 'frozen', False):
         return Path(sys.executable).parent
     return Path(__file__).parent.parent
+
+
+def _ensure_config_exists(app_dir: Path) -> Path:
+    """确保 config.yaml 存在：exe 目录没有则创建默认配置"""
+    config_path = app_dir / "config.yaml"
+    if not config_path.exists():
+        try:
+            config_path.write_text(DEFAULT_CONFIG, encoding="utf-8")
+        except Exception:
+            pass
+    return config_path
 
 
 class ConfigLoader:
@@ -25,16 +70,16 @@ class ConfigLoader:
     def _find_config_file(self) -> str:
         """查找配置文件"""
         app_dir = _get_app_dir()
-        possible_paths = [
-            app_dir / "config.yaml",
-            Path.cwd() / "config.yaml",
-            Path.cwd() / "config" / "config.yaml",
-        ]
-        for path in possible_paths:
-            if path.exists():
-                return str(path)
-        # 都没找到时，返回 app_dir 下的路径（首次运行会创建）
-        return str(app_dir / "config.yaml")
+        # 优先找 exe 同目录
+        config_path = app_dir / "config.yaml"
+        if config_path.exists():
+            return str(config_path)
+        # 兼容：也找当前工作目录
+        cwd_config = Path.cwd() / "config.yaml"
+        if cwd_config.exists():
+            return str(cwd_config)
+        # 都没有 → 创建默认配置到 exe 目录
+        return str(_ensure_config_exists(app_dir))
 
     def _load_config(self) -> None:
         """加载YAML配置文件"""
@@ -104,7 +149,6 @@ class ConfigLoader:
         self._config["api"]["api_key"] = api_key
         self._config["api"]["model"] = model
 
-        # 确保父目录存在
         self.config_path.parent.mkdir(parents=True, exist_ok=True)
         with open(self.config_path, "w", encoding="utf-8") as f:
             yaml.dump(self._config, f, allow_unicode=True, default_flow_style=False)

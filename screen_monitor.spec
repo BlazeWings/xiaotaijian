@@ -1,16 +1,26 @@
 # -*- mode: python ; coding: utf-8 -*-
 
-
 a = Analysis(
     ['main.py'],
     pathex=[],
     binaries=[],
-    datas=[],
-    hiddenimports=[],
+    datas=[('config.yaml', '.')],
+    hiddenimports=[
+        'mss', 'mss.base', 'mss.windows',
+        'PIL', 'PIL.Image',
+        'requests', 'yaml',
+        'src', 'src.ai_api', 'src.card_generator', 'src.config_loader',
+        'src.scheduler', 'src.screenshot', 'src.settings_ui',
+        'src.activity_stats', 'src.app_observer', 'src.forced_mode',
+        'src.overlay', 'src.report_generator',
+    ],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
-    excludes=[],
+    excludes=[
+        'tkinter', 'matplotlib', 'numpy', 'pandas',
+        'scipy', 'IPython', 'jupyter',
+    ],
     noarchive=False,
     optimize=0,
 )
