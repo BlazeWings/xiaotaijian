@@ -4,7 +4,7 @@
 >
 > 愿它如一位忠诚的小太监，替你掌管时间、记录行止、提醒专注。
 
-![界面预览](https://raw.githubusercontent.com/BlazeWings/xiaotaijian/main/docs/images/screenshot_1.png)
+![界面预览](https://raw.githubusercontent.com/BlazeWings/xiaotaijian/main/docs/images/panel_full.png)
 
 **小太监** 是一位安静的屏幕侍从。它默默注视你的屏幕，用 AI 之眼解读你正在做什么，化为一张张时光卡片；它在屏幕一角悬挂一面"照妖镜"，让你随时看清自己的时间去了哪里。
 
@@ -81,9 +81,9 @@ python main.py --install-autostart
 
 ## 🖼️ 界面一览
 
-| 悬浮面板 | 运行状态 |
+| 完整面板 | 最小化视图 |
 |---------|---------|
-| ![面板](https://raw.githubusercontent.com/BlazeWings/xiaotaijian/main/docs/images/screenshot_2.png) | ![运行](https://raw.githubusercontent.com/BlazeWings/xiaotaijian/main/docs/images/screenshot_3.png) |
+| ![面板](https://raw.githubusercontent.com/BlazeWings/xiaotaijian/main/docs/images/panel_full.png) | ![最小化](https://raw.githubusercontent.com/BlazeWings/xiaotaijian/main/docs/images/panel_mini.png) |
 
 界面采用 **新粗野主义（Neobrutalism）** 风格：米色底 + 黑色粗描边 + 硬阴影 + 平涂亮色，干净利落，不媚不俗。
 
