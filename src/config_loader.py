@@ -1,7 +1,15 @@
 import os
+import sys
 import yaml
 from pathlib import Path
 from typing import Any, Dict, Optional
+
+
+def _get_app_dir() -> Path:
+    """获取应用程序所在目录（兼容 PyInstaller 打包后的 exe）"""
+    if getattr(sys, 'frozen', False):
+        return Path(sys.executable).parent
+    return Path(__file__).parent.parent
 
 
 class ConfigLoader:
@@ -16,15 +24,17 @@ class ConfigLoader:
 
     def _find_config_file(self) -> str:
         """查找配置文件"""
+        app_dir = _get_app_dir()
         possible_paths = [
+            app_dir / "config.yaml",
             Path.cwd() / "config.yaml",
-            Path(__file__).parent.parent / "config.yaml",
             Path.cwd() / "config" / "config.yaml",
         ]
         for path in possible_paths:
             if path.exists():
                 return str(path)
-        raise FileNotFoundError("未找到配置文件 config.yaml")
+        # 都没找到时，返回 app_dir 下的路径（首次运行会创建）
+        return str(app_dir / "config.yaml")
 
     def _load_config(self) -> None:
         """加载YAML配置文件"""
@@ -94,6 +104,8 @@ class ConfigLoader:
         self._config["api"]["api_key"] = api_key
         self._config["api"]["model"] = model
 
+        # 确保父目录存在
+        self.config_path.parent.mkdir(parents=True, exist_ok=True)
         with open(self.config_path, "w", encoding="utf-8") as f:
             yaml.dump(self._config, f, allow_unicode=True, default_flow_style=False)
 

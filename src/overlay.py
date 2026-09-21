@@ -44,12 +44,8 @@ from . import forced_mode as fm
 
 logger = logging.getLogger(__name__)
 
-# 强制模式黑名单文件路径
-try:
-    _BASE_DIR = Path(__file__).resolve().parent.parent
-except Exception:
-    _BASE_DIR = Path.cwd()
-FORBIDDEN_FILE = str(_BASE_DIR / "forbidden.txt")
+# 强制模式黑名单文件路径（exe 运行时 cwd 已被 main.py 切换到 exe 目录）
+FORBIDDEN_FILE = str(Path.cwd() / "forbidden.txt")
 
 # Win32 SetWindowPos：用于周期性重新声明置顶（防止被其他置顶窗口/无边框游戏抢走顶层）
 _SWP = None

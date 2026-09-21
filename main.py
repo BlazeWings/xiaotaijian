@@ -9,6 +9,10 @@ from datetime import datetime
 from logging.handlers import TimedRotatingFileHandler
 from pathlib import Path
 
+# PyInstaller 打包后，切换工作目录到 exe 所在目录，确保 config.yaml / data / logs 能被找到
+if getattr(sys, 'frozen', False):
+    os.chdir(Path(sys.executable).parent)
+
 from src.config_loader import ConfigLoader
 from src.scheduler import ScreenMonitorScheduler
 from src.forced_mode import ForcedModeMonitor, PSUTIL_AVAILABLE
@@ -264,7 +268,7 @@ class Application:
                 logger.error("psutil 未安装，无法使用强制模式。请运行: pip install psutil")
                 self._running = False
                 return False
-            forbidden_path = Path(__file__).parent / "forbidden.txt"
+            forbidden_path = Path.cwd() / "forbidden.txt"
             self.forced_monitor = ForcedModeMonitor(
                 forbidden_file=str(forbidden_path),
                 check_interval=1.0,
@@ -474,7 +478,7 @@ def main():
         force_mode = args.force_mode
 
         if mode is None and not args.ui:
-            forbidden_path = Path(__file__).parent / "forbidden.txt"
+            forbidden_path = Path.cwd() / "forbidden.txt"
 
             while True:
                 print()
